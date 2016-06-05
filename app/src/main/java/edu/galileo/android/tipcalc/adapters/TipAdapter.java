@@ -28,7 +28,8 @@ public class TipAdapter extends RecyclerView.Adapter<TipAdapter.ViewHolder> {
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_row, parent, false);
+        View view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.item_row, parent, false);
 
         return new ViewHolder(view);
     }
@@ -36,7 +37,8 @@ public class TipAdapter extends RecyclerView.Adapter<TipAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         TipRecord element = dataset.get(position);
-        String strTip = String.format(context.getString(R.string.global_message_tip, element.getTip()));
+        String strTip = String.format(
+                            context.getString(R.string.global_message_tip, element.getTip()));
         holder.txtContent.setText(strTip);
     }
 
@@ -54,8 +56,6 @@ public class TipAdapter extends RecyclerView.Adapter<TipAdapter.ViewHolder> {
         dataset.clear();
         notifyDataSetChanged();
     }
-
-
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.txtContent)

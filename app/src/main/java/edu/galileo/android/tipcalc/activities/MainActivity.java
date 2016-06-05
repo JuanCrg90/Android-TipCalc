@@ -14,6 +14,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.util.Date;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -21,6 +23,7 @@ import edu.galileo.android.tipcalc.R;
 import edu.galileo.android.tipcalc.TipCalcApp;
 import edu.galileo.android.tipcalc.fragments.TipHistoryListFragment;
 import edu.galileo.android.tipcalc.fragments.TipHistoryListFragmentListener;
+import edu.galileo.android.tipcalc.models.TipRecord;
 
 public class MainActivity extends AppCompatActivity {
     @Bind(R.id.inputBill)
@@ -78,10 +81,13 @@ public class MainActivity extends AppCompatActivity {
             double total = Double.parseDouble((strInputTotal));
             int tipPercentage = getTipPercentage();
 
-            double tip = total * (tipPercentage/100d);
+            TipRecord tipRecord = new TipRecord();
+            tipRecord.setBill(total);
+            tipRecord.setTipPercentage(tipPercentage);
+            tipRecord.setTimestamp(new Date());
 
-            String strTip = String.format(getString(R.string.global_message_tip), tip);
-            fragmentListener.action(strTip);
+            String strTip = String.format(getString(R.string.global_message_tip), tipRecord.getTip());
+            fragmentListener.addToList(tipRecord);
             txtTip.setVisibility((View.VISIBLE));
             txtTip.setText(strTip);
         }
@@ -99,6 +105,10 @@ public class MainActivity extends AppCompatActivity {
         handleTipChange(-TIP_STEP_CHANGE);
     }
 
+    @OnClick(R.id.btnClear)
+    public void handleClickClear() {
+        fragmentListener.clearList();
+    }
 
 
     public int getTipPercentage() {
@@ -132,7 +142,6 @@ public class MainActivity extends AppCompatActivity {
             inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         } catch (NullPointerException npe) {
             Log.e(getLocalClassName(), Log.getStackTraceString(npe));
-
         }
     }
 
